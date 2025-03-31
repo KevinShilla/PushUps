@@ -34,7 +34,6 @@
       border-radius: 4px;
       margin-top: 10px;
     }
-    /* Hide video element since we use canvas for display */
     #video {
       display: none;
     }
@@ -45,9 +44,7 @@
   <button id="startButton">Start</button>
   <div id="message"></div>
   <div id="counter">Push-ups: 0</div>
-  <!-- Video element to capture the camera feed -->
   <video id="video" playsinline></video>
-  <!-- Canvas to display video and overlays -->
   <canvas id="canvas"></canvas>
 
   <!-- TensorFlow.js and MoveNet pose detection model -->
@@ -55,20 +52,18 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 
   <script>
-    // Global variables
     let detector, video, canvas, ctx;
     let pushUpCount = 0;
-    let pushUpState = "up";  // "up" or "down"
+    let pushUpState = "up"; 
     let modelLoaded = false;
-    const downThreshold = 90;   // degrees – when push-up is in the "down" position
-    const upThreshold = 160;    // degrees – when push-up is fully extended
-    const beepAudio = new Audio('beep.mp3');  // Ensure beep.mp3 is in the same folder
+    const downThreshold = 90; 
+    const upThreshold = 160;  
+    const beepAudio = new Audio('beep.mp3'); 
 
     // When start button is clicked
     document.getElementById('startButton').addEventListener('click', startApp);
 
     async function startApp() {
-      // Hide start button
       document.getElementById('startButton').style.display = "none";
 
       // Set up video stream
@@ -82,13 +77,11 @@
         return;
       }
 
-      // Set up canvas to match video size
       canvas = document.getElementById('canvas');
       ctx = canvas.getContext('2d');
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
 
-      // Load MoveNet model
       document.getElementById('message').innerText = "Loading pose detection model...";
       detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, {
         modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING
@@ -96,11 +89,9 @@
       modelLoaded = true;
       document.getElementById('message').innerText = "";
 
-      // Start the pose detection loop
       detectPose();
     }
 
-    // Function to calculate angle (in degrees) between three points (A, B, C) at point B
     function calculateAngle(A, B, C) {
       const AB = { x: A.x - B.x, y: A.y - B.y };
       const CB = { x: C.x - B.x, y: C.y - B.y };
@@ -114,15 +105,12 @@
     async function detectPose() {
       if (!modelLoaded) return;
 
-      // Draw video frame on canvas
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      // Run pose detection on current video frame
       const poses = await detector.estimatePoses(video);
       if (poses && poses.length > 0) {
         const keypoints = poses[0].keypoints;
 
-        // Get required keypoints for left and right arms
         const leftShoulder = keypoints.find(kp => kp.name === "left_shoulder");
         const leftElbow = keypoints.find(kp => kp.name === "left_elbow");
         const leftWrist = keypoints.find(kp => kp.name === "left_wrist");
@@ -133,12 +121,10 @@
         // Check if keypoints are detected with enough confidence
         if (leftShoulder.score > 0.5 && leftElbow.score > 0.5 && leftWrist.score > 0.5 &&
             rightShoulder.score > 0.5 && rightElbow.score > 0.5 && rightWrist.score > 0.5) {
-          // Calculate elbow angles for both arms
           const leftAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
           const rightAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
           const minAngle = Math.min(leftAngle, rightAngle);
 
-          // State machine for push-up detection
           if (pushUpState === "up" && minAngle < downThreshold) {
             pushUpState = "down";
           }
@@ -151,11 +137,9 @@
           }
         }
 
-        // Optional: Draw keypoints on canvas
         drawKeypoints(keypoints);
       }
 
-      // Loop the detection function
       requestAnimationFrame(detectPose);
     }
 
