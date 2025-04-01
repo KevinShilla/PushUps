@@ -14,10 +14,3 @@ This project is a real-time push-up counter that uses your webcam to track your 
 ## How It Works
 
 The app uses the MoveNet model from TensorFlow.js to estimate your pose. It calculates key angles (such as the elbow angle) and uses a simple state machine to detect the down and up phases of a push-up.
-
-## Setup and Running Locally
-
-1. **Clone or Download the Repository:**  
-   Download this repository or clone it using:
-   ```bash
-   git clone https://github.com/KevinShilla/PushUps.git
