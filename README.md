@@ -1,6 +1,7 @@
 # Push-Up Counter Web App
 
 https://kevinshilla.github.io/PushUps/
+
 This project is a real-time push-up counter that uses your webcam to track your form and count your push-ups. When you complete a proper push-up, the app plays a beep sound and updates your count on the screen.
 
 ## Features
