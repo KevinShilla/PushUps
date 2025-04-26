@@ -60,13 +60,11 @@
     const upThreshold = 160;  
     const beepAudio = new Audio('beep.mp3'); 
 
-    // When start button is clicked
     document.getElementById('startButton').addEventListener('click', startApp);
 
     async function startApp() {
       document.getElementById('startButton').style.display = "none";
 
-      // Set up video stream
       video = document.getElementById('video');
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -118,7 +116,6 @@
         const rightElbow = keypoints.find(kp => kp.name === "right_elbow");
         const rightWrist = keypoints.find(kp => kp.name === "right_wrist");
 
-        // Check if keypoints are detected with enough confidence
         if (leftShoulder.score > 0.5 && leftElbow.score > 0.5 && leftWrist.score > 0.5 &&
             rightShoulder.score > 0.5 && rightElbow.score > 0.5 && rightWrist.score > 0.5) {
           const leftAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
@@ -143,7 +140,6 @@
       requestAnimationFrame(detectPose);
     }
 
-    // Function to draw keypoints as circles
     function drawKeypoints(keypoints) {
       keypoints.forEach(kp => {
         if (kp.score > 0.5) {
@@ -155,13 +151,11 @@
       });
     }
 
-    // Function to play beep sound
     function playBeep() {
       beepAudio.currentTime = 0;
       beepAudio.play();
     }
 
-    // Function to briefly show "Good form!" message
     function showGoodForm() {
       const messageDiv = document.getElementById('message');
       messageDiv.innerText = "Good form!";
