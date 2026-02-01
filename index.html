@@ -52,6 +52,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 
   <script>
+    
     let detector, video, canvas, ctx;
     let pushUpCount = 0;
     let pushUpState = "up"; 
@@ -63,6 +64,7 @@
     document.getElementById('startButton').addEventListener('click', startApp);
 
     async function startApp() {
+      
       document.getElementById('startButton').style.display = "none";
 
       video = document.getElementById('video');
@@ -140,6 +142,8 @@
       requestAnimationFrame(detectPose);
     }
 
+
+    
     function drawKeypoints(keypoints) {
       keypoints.forEach(kp => {
         if (kp.score > 0.5) {
@@ -166,3 +170,4 @@
   </script>
 </body>
 </html>
+
